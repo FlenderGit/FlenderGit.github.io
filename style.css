@@ -1,16 +1,22 @@
 body{
-    background-color: aqua;
+    background-color: rgb(45, 129, 240);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 h1{
     text-align: center;
+    color: antiquewhite;
 }
 
 .container {
     width: 200px;
     height: 200px;
     perspective: 1000px ;
-    margin: 100px auto 0;
+    margin: 100px auto;
+    box-shadow: 0px 0px 100px -6px rgba(255, 255, 255, 0.95);
+    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.274) 97%, rgba(93, 94, 90, 0.055) 100%);
+
 }
 
 .cube{
@@ -22,23 +28,45 @@ h1{
 }
 
 .cube.boid{
-    transform: rotateY(180deg);
+    transform: rotateY(190deg) rotateX(10deg);
 }
 
 .cube.perlin{
-    transform: rotateY(90deg);
+    transform: rotateY(100deg) rotateZ(-10deg);
 }
 
 .cube.carML{
-    transform: rotateY(0deg);
+    transform: rotateY(10deg) rotateX(-10deg);
 }
 
 .cube.ascii{
-    transform: rotateY(-90deg);
+    transform: rotateY(-80deg) rotateZ(10deg);
 }
 
 .cube.minecraft{
-    transform: rotateX(-90deg);
+    transform: rotateX(-100deg) rotateZ(10deg);
+}
+
+.controller{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    width: 200px;
+    border-radius: 20px;
+    background-color: bisque;
+    position: absolute;
+    left: 40%;
+}
+
+.leftButton , .rightButton{
+    user-select: none;
+    cursor: pointer;
+}
+
+.controller p{
+    margin: 10px;
 }
 
 .projects {
@@ -68,19 +96,34 @@ h1{
 
 .expliProject{
     position: absolute;
-    right: 7%;
+    right: 10%;
     top: 10%;
     border: 2px solid black;
     width: 450px;
     height: 300px;
-    display: none;
     padding: 10px;
+    opacity: 1;
+    perspective: 1000px ;
+    background-color: black;
+    /*transition: transform 1s ease-in ,opacity 1s ease .5s,  background-color 1.2s ease-in;*/
+    transform-style: preserve-3d;
+    transform: perspective(200px) rotateY(-5deg);
+    transition: all 2s ease-in-out;
+    user-select: none;
+
+
 }
 
 .expliProject.show{
-    display:block;
-    background-color: aliceblue;
-    transition: background-color 1.2s ease-out;
+    transition: all 2s ease-in-out;
+}
+
+.expli-close-btn{
+    position: absolute;
+    right: 3%;
+    top: 4%;
+    border:2px solid black;
+    cursor: pointer;
 }
 
 .top {
@@ -97,6 +140,7 @@ h1{
     /*background: radial-gradient(circle, rgb(255, 0, 0,250) 0%, rgb(175, 0, 0,200) 35%, rgba(75,0,0,190) 84%, rgba(0,0,0) 100%);*/
     background-image: url("PP.jpg");
     background-size: contain;
+    box-shadow: inset 10px 10px 122px 1px rgba(0,0,0,0.53);
     transform: rotateY(90deg) translateZ(100px);
 }
 

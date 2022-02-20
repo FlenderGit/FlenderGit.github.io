@@ -1,55 +1,101 @@
-const boidButton = document.querySelector('.boidButton');
-const perlinButton = document.querySelector('.perlinButton');
-const carMLButton = document.querySelector('.carMLButton');
-const asciiButton = document.querySelector('.asciiArtButton');
-const minecraftButton = document.querySelector('.minecraftButton');
+const leftButton = document.querySelector('.leftButton');
+const rightButton = document.querySelector('.rightButton');
 
 const expliProject = document.querySelector('.expliProject');
-
-
-
-
+const expliCloseBtn = document.querySelector('.expli-close-btn');
 
 const cube = document.querySelector('.cube');
-console.log("Test" , carMLButton);
 
-boidButton.addEventListener('click',(e)=>{
+
+let i = 0
+
+
+
+rightButton.addEventListener('click',(e)=>{
+
     e.preventDefault();
-    cube.classList = 'cube'
-    cube.classList.add('boid');
-    expliProject.classList.add('show')
-    let expli = document.getElementById('id')
-    expli.style.backgroundColor = 'green' ;
-    expli.innerHTML = "<a href='Boids\\boid.html'>Boid Simulation</a><p>Une simulation de boid est ...</p><p>Pour plus d'information : ...<p/>";
+    if ( i <5){
+        i++;
+    }else{
+        i = 0;
+    }
+
+    console.log(i)
+    
+    makeChange();
+
 });
 
-perlinButton.addEventListener('click',(e)=>{
+leftButton.addEventListener('click',(e)=>{
+
     e.preventDefault();
-    cube.classList = 'cube'
-    cube.classList.add('perlin');
-    expliProject.classList.add('show')
-    let expli = document.getElementById('id')
-    expli.style.backgroundColor = 'red' ;
-    expli.innerText = 'Perlin';
+    if ( i >0){
+        i--;
+    }else{
+        i = 5;
+    }
+
+    
+    makeChange();
+
 });
 
-carMLButton.addEventListener('click',(e)=>{
-    e.preventDefault();
-    cube.classList = 'cube'
-    cube.classList.add('carML');
-    document.getElementById('id').style.backgroundColor = 'blue' ;
-});
+function makeChange(){
 
-asciiButton.addEventListener('click',(e)=>{
-    e.preventDefault();
-    cube.classList = 'cube'
-    cube.classList.add('ascii');
-    document.getElementById('id').style.backgroundColor = 'yellow' ;
-});
+    expliProject.classList.remove('show')
 
-minecraftButton.addEventListener('click',(e)=>{
+    switch (i){
+        
+        case 0:
+            cube.classList = 'cube'
+            cube.classList.add('boid');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'rgba(0,175,150)' ;
+            document.getElementById('expli-txt').innerHTML = "<a href='Boids\\boid.html'>Boid Simulation</a><p>Une simulation de boid est ...</p><p> Pour plus d'information : ...</p>"
+            break;
+        case 1:
+            cube.classList = 'cube'
+            cube.classList.add('perlin');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'rgba(150,0,175)' ;
+            document.getElementById('expli-txt').innerHTML = "<a href='cubeWorld\\cubeWorld.html'>CubeWorld</a><p>Le bruit de Perlin est ...</p><p> Pour plus d'information : ...</p>"
+            break;
+
+        case 2:
+            cube.classList = 'cube'
+            cube.classList.add('carML');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'blue' ;
+            break;
+
+        case 3:
+            cube.classList = 'cube'
+            cube.classList.add('ascii');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'yellow' ;
+            break;
+
+        case 4:
+            cube.classList = 'cube'
+            cube.classList.add('ascii');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'purple' ;
+            break;
+
+        case 5:
+            cube.classList = 'cube'
+            cube.classList.add('ascii');
+            expliProject.classList.add('show')
+            document.getElementById('expli').style.backgroundColor = 'grey' ;
+            break;
+
+
+    }
+
+}
+
+expliCloseBtn.addEventListener('click',(e)=>{
     e.preventDefault();
-    cube.classList = 'cube'
-    cube.classList.add('minecraft');
-    document.getElementById('id').style.backgroundColor = 'purple' ;
+    expliProject.classList.remove('show')
+    document.getElementById('expli').style.backgroundColor ='black';
 });
