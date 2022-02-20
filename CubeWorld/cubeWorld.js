@@ -99,7 +99,6 @@ class Player {
         this.walkingLeft = false
         this.walkingRight = false
         this.velY = 0
-        console.log(this.y)
     }
 
     getX(){
@@ -115,6 +114,10 @@ class Player {
             this.x--;
         }else if (this.walkingRight == true){
             this.x++;
+        }
+        
+        if(world.grid[~~(this.y)][divEucli(this.x,side)] instanceof Air){
+            this.y += .04;
         }
 
     }
@@ -176,6 +179,6 @@ function divEucli(nb,div){
 
 
 let world = new World(4,10)
-let player = new Player(0,5)
+let player = new Player(0,7)
 
 animate()

@@ -58,7 +58,7 @@ function makeChange(){
             cube.classList.add('perlin');
             expliProject.classList.add('show')
             document.getElementById('expli').style.backgroundColor = 'rgba(150,0,175)' ;
-            document.getElementById('expli-txt').innerHTML = "<a href='cubeWorld\\cubeWorld.html'>CubeWorld</a><p>Le bruit de Perlin est ...</p><p> Pour plus d'information : ...</p>"
+            document.getElementById('expli-txt').innerHTML = "<a href='CubeWorld\\cubeWorld.html'>CubeWorld</a><p>Le bruit de Perlin est ...</p><p> Pour plus d'information : ...</p>"
             break;
 
         case 2:
@@ -93,6 +93,8 @@ function makeChange(){
     }
 
 }
+
+
 
 expliCloseBtn.addEventListener('click',(e)=>{
     e.preventDefault();
