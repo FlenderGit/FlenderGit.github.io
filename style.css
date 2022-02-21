@@ -75,6 +75,7 @@ h1{
     justify-content: center;
     align-items: center;
     height: 200px;
+    display: none;
 }
 
 .projects p {
@@ -105,10 +106,10 @@ h1{
     opacity: 1;
     perspective: 1000px ;
     background-color: black;
-    /*transition: transform 1s ease-in ,opacity 1s ease .5s,  background-color 1.2s ease-in;*/
+    transition: transform 1s ease-in ,opacity 1s ease .5s,  background-color 1.2s ease-in;
     transform-style: preserve-3d;
     transform: perspective(200px) rotateY(-5deg);
-    transition: all 2s ease-in-out;
+    /*transition: all 2s ease-in-out;*/
     user-select: none;
 
 

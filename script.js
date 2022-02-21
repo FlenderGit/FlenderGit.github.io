@@ -51,14 +51,14 @@ function makeChange(){
             cube.classList.add('boid');
             expliProject.classList.add('show')
             document.getElementById('expli').style.backgroundColor = 'rgba(0,175,150)' ;
-            document.getElementById('expli-txt').innerHTML = "<a href='Boids\\boid.html'>Boid Simulation</a><p>Une simulation de boid est ...</p><p> Pour plus d'information : ...</p>"
+            document.getElementById('expli-txt').innerHTML = "<a href='Boids\\boid.html'>Boid Simulation</a><p>Un Boid est une simulation de vol d'oiseau. </p><p> Pour plus d'information : ...</p>"
             break;
         case 1:
             cube.classList = 'cube'
             cube.classList.add('perlin');
             expliProject.classList.add('show')
             document.getElementById('expli').style.backgroundColor = 'rgba(150,0,175)' ;
-            document.getElementById('expli-txt').innerHTML = "<a href='CubeWorld\\cubeWorld.html'>CubeWorld</a><p>Le bruit de Perlin est ...</p><p> Pour plus d'information : ...</p>"
+            document.getElementById('expli-txt').innerHTML = "<a href='CubeWorld\\cubeWorld.html'>CubeWorld</a><p>CubeWorld est un mini jeu disponible sur navigateur. La map est générée grace au bruit de Perlin.</p><p> Pour plus d'information : ...</p>"
             break;
 
         case 2:
@@ -100,4 +100,5 @@ expliCloseBtn.addEventListener('click',(e)=>{
     e.preventDefault();
     expliProject.classList.remove('show')
     document.getElementById('expli').style.backgroundColor ='black';
+    document.getElementById('expli-txt').innerHTML = ""
 });
