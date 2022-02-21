@@ -6,7 +6,7 @@ canvas.height = innerHeight
 
 const rect = canvas.getBoundingClientRect()
 
-let side = 20
+side = divEucli(innerWidth,20)
 const gravity = 2
 
 const dirtTexture = new Image()
