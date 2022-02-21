@@ -6,7 +6,7 @@ canvas.height = innerHeight
 
 const rect = canvas.getBoundingClientRect()
 
-let side = 10
+let side = 20
 const gravity = 2
 
 const dirtTexture = new Image()
@@ -311,7 +311,7 @@ function divEucli(nb,div){
 
 
 let world = new World(100,50)
-let player = new Player(0,0)
+let player = new Player(0,20)
 let mouse = new Mouse()
 
 
