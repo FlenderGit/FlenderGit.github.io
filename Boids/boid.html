@@ -1,31 +1,40 @@
-<style>
-    body {
-        margin: 0;
-        text-align: center;
-        background-color: black;
-    }
-    canvas{
-        width: 90%;
-        height: 90%;
-        border: 2px solid black;
-        margin: 2%;
-        background-color: beige;
-    }
-    table{
-        border:1px solid black;
-        position: absolute;
-        bottom: 7% ;
-        left: 7%;
-        user-select: none;
-    }
-    h1{
-        position: absolute;
-        top: 4% ;
-        left: 7%;
-        user-select: none;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boid Simulation</title>
 
+    <style>
+        body {
+            margin: 0;
+            text-align: center;
+            background-color: black;
+        }
+        canvas{
+            width: 90%;
+            height: 90%;
+            border: 2px solid black;
+            margin: 2%;
+            background-color: beige;
+        }
+        table{
+            border:1px solid black;
+            position: absolute;
+            bottom: 7% ;
+            left: 7%;
+            user-select: none;
+        }
+        h1{
+            position: absolute;
+            top: 4% ;
+            left: 7%;
+            user-select: none;
+        }
+    </style>
+
+</head>
 <body>
     <h1>Boids Simulation</h1>
     <div>
@@ -35,8 +44,8 @@
     <div>
         <table >
             <tr>
-                <td>Numbre of Boids</td>
-                <td><input id="nbBoid" type="range" value="20" min="1" max="200" onchange="changeNbBoid(this.value)"></td>
+                <td>Number of Boids</td>
+                <td><input id="nbBoid" type="range" value="20" min="1" max="500" onchange="changeNbBoid(this.value)"></td>
             </tr>
             <tr>
                 <td>Distance Flock</td>
@@ -47,13 +56,17 @@
                 <td><input id="dAlign" type="range" value="35" min="10" max="60"></td>
             </tr>
             <tr>
-                <td>Numbre Avoid</td>
+                <td>Distance Avoid</td>
                 <td><input id="dAvoid" type="range" value="20" min="1" max="40"></td>
+            </tr>
+            <tr>
+                <td>Distance Predate</td>
+                <td><input id="dPredate" type="range" value="20" min="0" max="200"></td>
             </tr>
         </table>
     </div>
 
 </body>
-
+</html>
 
 <script src="boid.js"></script>

@@ -8,12 +8,17 @@ const nbBoid = document.getElementById("nbBoid");
 const dFlock = document.getElementById("dFlock");
 const dAlign = document.getElementById("dAlign");
 const dAvoid = document.getElementById("dAvoid");
+const dPredate = document.getElementById("dPredate");
+
 
 let pad = 30
 let turn = 0.5
 
 let minSpeed = 1
 let maxSpeed = 5
+
+let cursorX = -1
+let cursorY = -1
 
 let lsBirds = []
 
@@ -44,8 +49,6 @@ class Bird {
     }
 
     moveForward(){
-        this.x += this.xVel
-        this.y += this.yVel
 
         let speed = Math.sqrt(Math.pow(this.xVel,2)+Math.pow(this.yVel,2))
 
@@ -56,6 +59,11 @@ class Bird {
             this.xVel = ( this.xVel / speed) * minSpeed
             this.yVel = ( this.yVel / speed) * minSpeed
         }
+
+        this.x += this.xVel
+        this.y += this.yVel
+
+        
 
     }
 
@@ -80,10 +88,18 @@ class Bird {
         cvx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
         cvx.stroke();
         //drawLine(cvx,[this.x,this.y],[this.x-this.xVel,this.y+this.yVel],'green',50)
+        
 
     }
 
 }
+
+function tellPos(p){
+    cursorX = p.pageX
+    cursorY = p.pageY
+}
+
+
 
 class Field{
     constructor(width,height,boidCount){
@@ -104,9 +120,10 @@ function advance(){
         let flock = Flock(bird,dFlock.value,0.0003)
         let align = Align(bird,dAlign.value,0.01)
         let avoid = Avoid(bird,dAvoid.value,0.001)
+        let predate = predator(bird,dPredate.value,.00005)
 
-        bird.xVel += flock[0] + align[0] + avoid[0]
-        bird.yVel += flock[1] + align[1] + avoid[1]
+        bird.xVel += flock[0] + align[0] + avoid[0] + predate[0]
+        bird.yVel += flock[1] + align[1] + avoid[1] + predate[1]
 
         bird.bounceOffWalls()
         bird.moveForward()
@@ -161,6 +178,7 @@ function Avoid(bird,distance,power){
 
 }
 
+addEventListener('mousemove', tellPos, true);
 
 function getNeighbors(bird,distance){
     let lsNeighbors = []
@@ -236,6 +254,18 @@ function changeNbBoid(nb){
             lsBirds.push(new Bird(getRandomInt(innerWidth),getRandomInt(innerHeight)))
         }
     }
+}
+
+function predator(bird,distance,power){
+    console.log(distance)
+    let lsCloseNess = [0,0]
+    let distanceTo = Math.sqrt( Math.pow(bird.getX() - cursorX,2) + Math.pow(bird.getY() - cursorY,2)  )
+    if ( distanceTo < distance ){
+        let closeNess = distance - distanceTo
+        lsCloseNess[0] = (bird.getX() - cursorX) * closeNess * power
+        lsCloseNess[1] = (bird.getY() - cursorY) * closeNess * power
+    }
+    return lsCloseNess
 }
 
 

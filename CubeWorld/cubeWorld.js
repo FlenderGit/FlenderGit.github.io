@@ -13,6 +13,8 @@ const dirtTexture = new Image()
 dirtTexture.src = 'dirt.png'
 const grassTexture = new Image()
 grassTexture.src = 'grass.png'
+const woodTexture = new Image()
+woodTexture.src = 'wood.png'
 
 
     w = window.innerWidth,
@@ -86,6 +88,10 @@ function CombineNoise(pl){
   return result;
 }
 
+function changeRenderDistance(nb){
+    side = divEucli(innerWidth,nb)
+}
+
 
 let heigths = CombineNoise(GenerateNoise(20, 128, 8, 2, 100))
 
@@ -142,6 +148,9 @@ class World {
     }
 }
 
+class ItemStack {
+
+}
 
 
 class Block {
@@ -167,15 +176,25 @@ class Dirt extends Block {
     }
 
     render(){
-        
         if(world.grid[this.y-1][this.x] instanceof Dirt){
             this.texture = dirtTexture
         }else{
             this.texture = grassTexture
         }
-        
         ctx.drawImage(this.texture,this.x*side - player.getX(),this.y*side - player.getY(),side,side)
+    }
 
+}
+
+class Wood extends Block {
+
+    constructor(x , y){
+        super(1,x,y)
+        this.texture = woodTexture
+    }
+
+    render(){
+        ctx.drawImage(this.texture,this.x*side - player.getX(),this.y*side - player.getY(),side,side)
     }
 
 }
@@ -191,6 +210,19 @@ class Air extends Block {
 
 }
 
+class Inventaire {
+    
+    constructor(){
+        this.place = 0
+    }
+
+    render(){
+        ctx.fillStyle = 'white'
+        ctx.fillRect(w*0.05,h*0.8,w*0.9,h*0.12 )
+    }
+
+}
+
 class Player {
 
     constructor(x , y){
@@ -200,6 +232,7 @@ class Player {
         this.walkingRight = false
         this.walkingUp = false
         this.walkingDown = false
+        this.inventory = new Inventaire
     }
 
     getX(){
@@ -231,15 +264,9 @@ class Player {
     render(){
         //ctx.fillStyle = 'red'
         //ctx.fillRect(0, (this.y-2)*side,this.width,this.height)
+        this.inventory.render()
     }
 
-}
-
-class Mouse {
-
-    constructor(){
-        this.mode = 0
-    }
 }
 
 
@@ -254,10 +281,12 @@ canvas.addEventListener('click',(e)=>{
 
     console.log(cursorX,cursorY,e.offsetY)
 
-    if(mouse.mode == 0){
+    if(player.inventory.place == 0){
         world.grid[cursorY][cursorX] = new Air(cursorX,cursorY)
-    }else{
+    }else if (player.inventory.place == 1){
         world.grid[cursorY][cursorX] = new Dirt(cursorX,cursorY)
+    }else if (player.inventory.place == 2){
+        world.grid[cursorY][cursorX] = new Wood(cursorX,cursorY)
     }
 
 
@@ -284,9 +313,11 @@ window.onkeydown = function(event) {
     }else if ( key == 'S' ) {
         player.walkingDown = true
     }else if ( key == 'A' ) {
-        mouse.mode = 0
+        player.inventory.place = 0
     }else if ( key == 'E' ) {
-        mouse.mode = 1
+        player.inventory.place = 1
+    }else if ( key == 'R' ) {
+        player.inventory.place = 2
     }
     
 }
@@ -311,8 +342,6 @@ function divEucli(nb,div){
 
 
 let world = new World(100,50)
-let player = new Player(0,20)
-let mouse = new Mouse()
-
+let player = new Player(0,240)
 
 animate()
