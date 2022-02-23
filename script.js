@@ -58,7 +58,7 @@ function makeChange(){
             cube.classList.add('perlin');
             expliProject.classList.add('show')
             document.getElementById('expli').style.backgroundColor = 'rgba(150,0,175)' ;
-            document.getElementById('expli-txt').innerHTML = "<a href='CubeWorld\\cubeWorld.html'>CubeWorld</a><p>CubeWorld est un mini jeu disponible sur navigateur. La map est générée grace au bruit de Perlin.</p><p> Pour plus d'information : ...</p>"
+            document.getElementById('expli-txt').innerHTML = "<a href='CarML\\carML.html'>Drive Machine Learning</a><p>Ceci est un editeur de circuit de voiture. Avec une intelligence artificielle permettant de le parcourir le plus rapidement possible</p><p> Pour plus d'information : ...</p>"
             break;
 
         case 2:
@@ -66,6 +66,7 @@ function makeChange(){
             cube.classList.add('carML');
             expliProject.classList.add('show')
             document.getElementById('expli').style.backgroundColor = 'blue' ;
+            document.getElementById('expli-txt').innerHTML = "<a href='CubeWorld\\cubeWorld.html'>CubeWorld</a><p>CubeWorld est un mini jeu disponible sur navigateur. La map est générée grace au bruit de Perlin.</p><p> Pour plus d'information : ...</p>"
             break;
 
         case 3:
