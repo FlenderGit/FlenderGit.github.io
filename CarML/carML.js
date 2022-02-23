@@ -335,13 +335,13 @@ let car = new Car(100,200)
 //console.log(matrixRd2)
 //console.log(matrixDot(matrixRd1,matrixRd2))
 
-let NN = new NeutralNetwork()
+//let NN = new NeutralNetwork()
 
-console.log(X)
-console.log(NN.W1)
+//console.log(X)
+//console.log(NN.W1)
 
-o = NN.forward(X)
-console.log(o)
+//o = NN.forward(X)
+//console.log(o)
 
 let lsSegments = []
 let lsPoints = []
