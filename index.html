@@ -4,58 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet Html</title>
+    <title>Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
-
 <body>
 
-    <h1>HTML Projects</h1>
+    <header>
+        <a href="#" class="logo">Flender</a>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </header>
 
-    <div class="container" id="cube-wrapper">
-        <div class="cube">
-            <div class="face front"></div>
-            <div class="face back"></div>
-            <div class="face left"></div>
-            <div class="face right"></div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
+    <!--- About Section ---> 
+
+    <div class="about" id="about">
+        <div>
+            <img src="img\lazy.png">
         </div>
+        <div class="text">
+            <div>
+                <h1>Developer</h1>
+                <p>
+                    I'm a developer. I code with Python , Java and Javascript.
+                </p>
+            </div>
+            
+        </div>
+        
     </div>
 
-    <div class="controller">
-        <div class="leftButton"><p>Left arrow</p></div>
-        <div class="rightButton"><p>Right arrow</p></div>
+    <!--- Projects Section ---> 
+
+    <div class="projects" id="projects">
+
+        <div class="card">
+            <h3>Boid Simulation</h3>
+            <p>Boid Simulation is a bird flight simulation. This simulation integrate predator and speed change.</p>
+            <a class="button" href="Boids\\boid.html">Go</a>
+        </div>
+    
+        <div class="card">
+            <h3>Gravity</h3>
+            <p>Gravity is a gravity simulator with collisions.</p>
+            <a class="button" href="Gravité\\gravity.html">Go</a>
+        </div>
+    
+        <div class="card">
+            <h3>Rope Simulation</h3>
+            <p>Rope simulation allows to simulate a string with variables changeable in real time. </p>
+            <a class="button" href="RopeSimulation\\ropeSimulation.html">Go</a>
+        </div>
+
     </div>
     
-    <div class="projects">
-
-        <p class="boidButton">Boid Simulation</p>
-
-        <p class="perlinButton">Perlin Noise Generator</p>
-
-        <p class="carMLButton">Car Machine Learning</p>
-            
-        <p class="asciiArtButton">Ascii Art</p>
-            
-        <p class="minecraftButton">Minecraft</p>
-            
-        <p>Two Player Game</p>
-
-    </div>
-
-    <div class="expliProject" id="expli">
-        <p id="expli-txt"></p>
-        <div class="expli-close-btn">
-            <p >Close</p>
-        </div>
-    </div>
-
-    
-
-
 </body>
 </html>
-
-<script src="script.js"></script>

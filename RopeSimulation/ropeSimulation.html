@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rope ropSimulation</title>
+    <link rel="stylesheet" href="ropeSimulation.css">
+</head>
+<body>
+    <h1>Rope Simulation</h1>
+    <canvas></canvas>
+    <div class="table">
+        <table >
+            <tr>
+                <td>Length Rope</td>
+                <td><input id="lRope" type="range" value="5" min="3" max="50" onchange="changeLengthRope(this.value)"></td>
+            </tr>
+            <tr>
+                <td>Length Segment</td>
+                <td><input id="lSeg" type="range" value="10" min="3" max="50" onchange="changeDistanceParticle(this.value)"></td>
+            </tr>
+            <tr>
+                <td>Gravity</td>
+                <td><input id="powGravity" type="range" value="10" min="1" max="20"></td>
+            </tr>
+            <tr>
+            <tr>
+                <td>Gravity</td>
+                <td>
+                    <input id="gravity" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Physics</td>
+                <td>
+                    <input id="physics" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+</body>
+</html>
+
+<script src="ropeSimulation.js"></script>

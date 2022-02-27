@@ -1,5 +1,7 @@
+//  -------------------- Constants --------------------  // 
+
 const canvas = document.querySelector('canvas')
-const cvx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d')
 
 canvas.width = innerWidth
 canvas.height = innerHeight
@@ -9,21 +11,30 @@ const dFlock = document.getElementById("dFlock");
 const dAlign = document.getElementById("dAlign");
 const dAvoid = document.getElementById("dAvoid");
 const dPredate = document.getElementById("dPredate");
+const mPredate = document.getElementById("mPredate");
 
+const MIN_SPEED_BIRD = 2
+const MAX_SPEED_BIRD = 5
+
+const MIN_SPEED_PREDATOR = 1
+const MAX_SPEED_PREDATOR = 3
+
+
+//  -------------------- Variables --------------------  // 
 
 let pad = 30
 let turn = 0.5
-
-let minSpeed = 1
-let maxSpeed = 5
 
 let cursorX = -1
 let cursorY = -1
 
 let lsBirds = []
+let lsPredate = []
 
 
-class Bird {
+//  -------------------- Classs --------------------  // 
+
+class Entity{
 
     constructor( x , y){
         this.x = x
@@ -48,7 +59,7 @@ class Bird {
         return this.yVel
     }
 
-    moveForward(){
+    moveForward(minSpeed,maxSpeed){
 
         let speed = Math.sqrt(Math.pow(this.xVel,2)+Math.pow(this.yVel,2))
 
@@ -59,12 +70,8 @@ class Bird {
             this.xVel = ( this.xVel / speed) * minSpeed
             this.yVel = ( this.yVel / speed) * minSpeed
         }
-
         this.x += this.xVel
         this.y += this.yVel
-
-        
-
     }
 
     bounceOffWalls(){
@@ -81,59 +88,53 @@ class Bird {
             this.yVel -= turn;
         }
     }
+}
 
-    render(){
-        cvx.fillStyle = 'red'
-        cvx.beginPath();
-        cvx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
-        cvx.stroke();
-        //drawLine(cvx,[this.x,this.y],[this.x-this.xVel,this.y+this.yVel],'green',50)
-        
+class Predator extends Entity {
 
+    constructor( x , y){
+        super(x,y)
     }
 
+    render(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 7, 0, 2 * Math.PI);
+        ctx.fillStyle = 'red'
+        ctx.fill();
+        ctx.stroke();
+    }
 }
 
-function tellPos(p){
-    cursorX = p.pageX
-    cursorY = p.pageY
+class Bird extends Entity {
+
+    constructor( x , y){
+        super(x,y)
+    }
+
+    render(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'green'
+        ctx.fill();
+        ctx.stroke();
+    }
 }
-
-
 
 class Field{
     constructor(width,height,boidCount){
         this.width = width
         this.height = height
         this.boidCount = boidCount
-
         for ( let i = 0 ; i < boidCount ; i++){
             lsBirds[i] = new Bird(getRandomInt(innerWidth),getRandomInt(innerHeight))
         }
     }
 }
 
-function advance(){
-    lsBirds.forEach(bird => {
-        
 
-        let flock = Flock(bird,dFlock.value,0.0003)
-        let align = Align(bird,dAlign.value,0.01)
-        let avoid = Avoid(bird,dAvoid.value,0.001)
-        let predate = predator(bird,dPredate.value,.00005)
-
-        bird.xVel += flock[0] + align[0] + avoid[0] + predate[0]
-        bird.yVel += flock[1] + align[1] + avoid[1] + predate[1]
-
-        bird.bounceOffWalls()
-        bird.moveForward()
-        bird.render()
-
-    });
-}
+//  -------------------- Functions Boid --------------------  // 
 
 function Flock(bird,distance,power){
-    
     let lsNeighbors = getNeighbors(bird,distance)
     let length = lsNeighbors.length
 
@@ -148,7 +149,6 @@ function Flock(bird,distance,power){
 }
 
 function Align(bird,distance,power){
-    
     let lsNeighbors = getNeighbors(bird,distance)
     let length = lsNeighbors.length
 
@@ -159,13 +159,10 @@ function Align(bird,distance,power){
     let dYvel = meanYvel - bird.getYvel()
 
     return [dXvel * power , dYvel * power]
-
 }
 
 function Avoid(bird,distance,power){
-    
     let lsNeighbors = getNeighbors(bird,distance)
-
     let lsCloseNess = [0,0]
 
     lsNeighbors.forEach(other => {
@@ -173,21 +170,69 @@ function Avoid(bird,distance,power){
         lsCloseNess[0] += (bird.getX() - other.getX()) * closeNess
         lsCloseNess[1] += (bird.getY() - other.getY()) * closeNess
     });
-
     return [lsCloseNess[0] * power , lsCloseNess[1] * power]
-
 }
 
-addEventListener('mousemove', tellPos, true);
-
-function getNeighbors(bird,distance){
-    let lsNeighbors = []
-    lsBirds.forEach(other => {
-        if (getDistance(bird,other) < distance){
-            lsNeighbors.push(other)
+function Predate(bird,distance,power){
+    let lsCloseNess = [0,0]
+    lsPredate.forEach(predate => {
+        let distanceTo = Math.sqrt( Math.pow(bird.getX() - predate.getX(),2) + Math.pow(bird.getY() - predate.getY(),2));
+        if ( distanceTo < distance ){
+            let closeNess = distance - distanceTo
+            lsCloseNess[0] = (bird.getX() - predate.getX()) * closeNess * power
+            lsCloseNess[1] = (bird.getY() - predate.getY()) * closeNess * power
         }
     });
-    return lsNeighbors
+    if (mPredate.checked){
+        let distanceTo = Math.sqrt( Math.pow(bird.getX() - cursorX,2) + Math.pow(bird.getY() - cursorY,2));
+        if ( distanceTo < distance ){
+            let closeNess = distance - distanceTo
+            lsCloseNess[0] = (bird.getX() - cursorX) * closeNess * power
+            lsCloseNess[1] = (bird.getY() - cursorY) * closeNess * power
+        }
+    }
+    return lsCloseNess
+}
+
+
+//  -------------------- Functions Canvas --------------------  // 
+
+function animate(){
+    requestAnimationFrame(animate)
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    advance()
+}
+
+
+//  -------------------- Functions Animation --------------------  // 
+
+function advance(){
+    lsBirds.forEach(bird => {
+        let flock = Flock(bird,dFlock.value,0.0003)
+        let align = Align(bird,dAlign.value,0.01)
+        let avoid = Avoid(bird,dAvoid.value,0.001)
+        let predate = Predate(bird,dPredate.value,.00005)
+
+        bird.xVel += flock[0] + align[0] + avoid[0] + predate[0]
+        bird.yVel += flock[1] + align[1] + avoid[1] + predate[1]
+
+        bird.bounceOffWalls()
+        bird.moveForward(MIN_SPEED_BIRD,MAX_SPEED_BIRD)
+        bird.render()
+    });
+    lsPredate.forEach(predate => {
+        predate.bounceOffWalls()
+        predate.moveForward(MIN_SPEED_PREDATOR,MAX_SPEED_PREDATOR)
+        predate.render()
+    });
+}
+
+
+///  -------------------- Functions Utils --------------------  // 
+
+function tellPos(p){
+    cursorX = p.pageX
+    cursorY = p.pageY
 }
 
 function getSumX(ls){
@@ -230,11 +275,9 @@ function drawLine(ctx, begin, end, stroke = 'black', width = 1) {
     if (stroke) {
         ctx.strokeStyle = stroke;
     }
-
     if (width) {
         ctx.lineWidth = width;
     }
-
     ctx.beginPath();
     ctx.moveTo(...begin);
     ctx.lineTo(...end);
@@ -246,7 +289,6 @@ function getRandomInt(max) {
 }
 
 function changeNbBoid(nb){
-    console.log(nb)
     if ( nb < lsBirds.length){
         lsBirds = lsBirds.slice(0,nb)
     } else if ( nb > lsBirds.length){
@@ -256,24 +298,34 @@ function changeNbBoid(nb){
     }
 }
 
-function predator(bird,distance,power){
-    console.log(distance)
-    let lsCloseNess = [0,0]
-    let distanceTo = Math.sqrt( Math.pow(bird.getX() - cursorX,2) + Math.pow(bird.getY() - cursorY,2)  )
-    if ( distanceTo < distance ){
-        let closeNess = distance - distanceTo
-        lsCloseNess[0] = (bird.getX() - cursorX) * closeNess * power
-        lsCloseNess[1] = (bird.getY() - cursorY) * closeNess * power
+function changeNbPredate(nb){
+    if ( nb < lsPredate.length){
+        lsPredate = lsPredate.slice(0,nb)
+    } else if ( nb > lsPredate.length){
+        for ( let i = 0 ; i < nb - lsPredate.length ; i++){
+            lsPredate.push(new Predator(getRandomInt(innerWidth),getRandomInt(innerHeight)))
+        }
     }
-    return lsCloseNess
+    console.log('Nb Predate : ' , lsPredate.length)
 }
 
 
-function animate(){
-    requestAnimationFrame(animate)
-    cvx.clearRect(0,0,canvas.width,canvas.height)
-    advance()
+///  -------------------- Listeners --------------------  // 
+
+addEventListener('mousemove', tellPos, true);
+
+function getNeighbors(bird,distance){
+    let lsNeighbors = []
+    lsBirds.forEach(other => {
+        if (getDistance(bird,other) < distance){
+            lsNeighbors.push(other)
+        }
+    });
+    return lsNeighbors
 }
+
+
+///  -------------------- Program --------------------  // 
 
 let field = new Field(canvas.width,canvas.height,nbBoid.value)
 
