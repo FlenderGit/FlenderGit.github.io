@@ -7,6 +7,7 @@ const nbBoid = document.getElementById("lRope");
 const dFlock = document.getElementById("lSeg");
 const gravity = document.getElementById("gravity");
 const physics = document.getElementById("physics");
+const pin = document.getElementById("pin");
 const powGravity = document.getElementById("powGravity");
 
 canvas.width = innerWidth
@@ -44,8 +45,12 @@ class Rope{
 
     simulate(){
         
-        this.lsParticle[0].nowX = cursorX
-        this.lsParticle[0].nowY = cursorY
+        if (!(pin.checked)){
+            this.lsParticle[0].nowX = cursorX
+            this.lsParticle[0].nowY = cursorY
+        }
+
+        
         
         for ( let i = 1 ; i < this.lsParticle.length ; i++){
 
@@ -177,6 +182,17 @@ function getDistance(x1,y1,x2,y2){
 ///  -------------------- Listeners --------------------  // 
 
 addEventListener('mousemove', tellPos, true);
+
+window.onkeydown = function(event) {
+    let key = event.key.toUpperCase();
+    if ( key == 'A' ) {
+        if(pin.checked){
+            pin.checked = false
+        }else{
+            pin.checked = true
+        }
+    }
+}
 
 
 ///  -------------------- Program --------------------  // 

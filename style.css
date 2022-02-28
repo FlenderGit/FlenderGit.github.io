@@ -86,10 +86,12 @@ header ul li a:hover {
     align-content: space-between;
     min-height: 200px;
     background-color: var(--main-bg-color);
+    flex-wrap: wrap;
 }
 
 .projects .card{
-    width: 335px;
+    height: 230px;
+    width: 350px;
     padding: 20px 35px;
     background-color: var(--dark-color);
     border-radius: 15px;
@@ -97,6 +99,7 @@ header ul li a:hover {
     position: relative;
     overflow: hidden;
     text-align: center;
+
 }
 
 .projects .card h3{

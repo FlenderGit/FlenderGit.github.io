@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    text-align: center;
+    background-color: black;
+}
+canvas{
+    width: 90%;
+    height: 90%;
+    margin: 2%;
+    background-color: beige;
+    padding: 0px;
+}
+
+h1{
+    position: absolute;
+    top: 4% ;
+    left: 7%;
+    user-select: none;
+}

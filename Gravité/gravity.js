@@ -1,17 +1,24 @@
+//  -------------------- Constants --------------------  // 
+
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 const RESTITUTION = .9
 const GRAVITY = 9.8
 
-let gravity = true
-
 canvas.height = innerHeight
 canvas.width = innerWidth
+
+
+//  -------------------- Variables --------------------  // 
+
+let gravity = true
 
 let pad = 30
 let turn = 0.5
 let lsEntity = []
+
+let lsColor = ['black','red','blue','green','purple','yellow']
 
 class Entity {
     constructor(x,y,velX,velY,mass){
@@ -23,6 +30,9 @@ class Entity {
         this.mass = mass
     }   
 }
+
+
+//  -------------------- Classs --------------------  // 
 
 class Circle extends Entity{
     constructor(x,y,velX,velY,radius){
@@ -76,18 +86,8 @@ class Circle extends Entity{
     }
 }
 
-function drawLine(ctx, begin, end, stroke = 'black', width = 1) {
-    if (stroke) {
-        ctx.strokeStyle = stroke;
-    }
-    if (width) {
-        ctx.lineWidth = width;
-    }
-    ctx.beginPath();
-    ctx.moveTo(...begin);
-    ctx.lineTo(...end);
-    ctx.stroke();
-}
+
+//  -------------------- Functions Maze --------------------  // 
 
 function detectCollision(){
     lsEntity.forEach(entity => {
@@ -137,12 +137,19 @@ function rectangleIntersect(x1, y1, w1, h1, x2, y2, w2, h2) {
     return squareDistance <= ((r1 + r2) * (r1 + r2))
 }
 
-lsColor = ['black','red','blue','green','purple','yellow']
 
+//  -------------------- Functions Canvas --------------------  // 
 
 function animate(){
     requestAnimationFrame(animate)
     ctx.clearRect(0,0,canvas.width,canvas.height)
+    advance()
+}
+
+
+//  -------------------- Functions Advance --------------------  // 
+
+function advance(){
     detectCollision()
     lsEntity.forEach(entity => {
         entity.tick()
@@ -150,21 +157,39 @@ function animate(){
     });
 }
 
-function getRandomFromArray(){
-    return lsColor[getRandomInt(lsColor.length-1)]
+
+//  -------------------- Functions Utils --------------------  // 
+
+function drawLine(ctx, begin, end, stroke = 'black', width = 1) {
+    if (stroke) {
+        ctx.strokeStyle = stroke;
+    }
+    if (width) {
+        ctx.lineWidth = width;
+    }
+    ctx.beginPath();
+    ctx.moveTo(...begin);
+    ctx.lineTo(...end);
+    ctx.stroke();
 }
 
-for ( let i = 0 ; i < 2 ; i++){
-    lsEntity.push(new Circle(getRandomInt(canvas.width-120)+60,getRandomInt(canvas.height-120)+60,Math.random()*2-1,Math.random()*2-1,getRandomInt(30)+10))
+function getRandomFromArray(){
+    return lsColor[getRandomInt(lsColor.length-1)]
 }
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+
+///  -------------------- Listeners --------------------  // 
+
 canvas.addEventListener('click',(e)=>{
     e.preventDefault();
     lsEntity.push(new Circle(e.offsetX,e.offsetY,0,0,getRandomInt(30)+10))   
 });
+
+
+///  -------------------- Program --------------------  // 
 
 animate()
