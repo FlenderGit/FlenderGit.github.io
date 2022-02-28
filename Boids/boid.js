@@ -292,7 +292,8 @@ function changeNbBoid(nb){
     if ( nb < lsBirds.length){
         lsBirds = lsBirds.slice(0,nb)
     } else if ( nb > lsBirds.length){
-        for ( let i = 0 ; i < nb - lsBirds.length ; i++){
+        let add = nb - lsBirds.length
+        for ( let i = 0 ; i < add ; i++){
             lsBirds.push(new Bird(getRandomInt(innerWidth),getRandomInt(innerHeight)))
         }
     }
@@ -302,7 +303,8 @@ function changeNbPredate(nb){
     if ( nb < lsPredate.length){
         lsPredate = lsPredate.slice(0,nb)
     } else if ( nb > lsPredate.length){
-        for ( let i = 0 ; i < nb - lsPredate.length ; i++){
+        let add = nb - lsPredate.length
+        for ( let i = 0 ; i < add ; i++){
             lsPredate.push(new Predator(getRandomInt(innerWidth),getRandomInt(innerHeight)))
         }
     }

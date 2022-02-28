@@ -16,3 +16,10 @@ canvas{
     background-color: rgb(170, 230, 230);
 }
 
+p{
+    position: absolute;
+    top: 6.5% ;
+    left: 15%;
+    user-select: none;
+}
+

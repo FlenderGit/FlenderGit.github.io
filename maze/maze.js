@@ -10,7 +10,9 @@ canvas.width = innerWidth
 //  -------------------- Variables --------------------  // 
 
 let lsWall = []
-let side = 20
+let side = 40
+let maxX = divEucli(innerWidth,side)
+let maxY = divEucli(innerHeight,side)
 
 let cursorX
 let cursorY
@@ -103,12 +105,24 @@ function isPresentOpenCout(cell){
     return state
 }
 
+function isPresentClose(x,y){
+    let i = 0
+    let state = false
+    while ( !(state) && i < lsClose.length ){
+        if (lsClose[i].x == x && lsClose[i].y == y){
+            state = true
+        }
+        i++;
+    }
+    return state
+}
+
 function voisin(cell){
     ls = []
     if(cell.y - 1 >= 0 && !(isWall(cell.x,cell.y - 1)) && isPresentOpen(cell.x,cell.y - 1)) ls.push(new Cell(cell.x,cell.y - 1,3,null,null))
-    if(isPresentOpen(cell.x,cell.y + 1)&& !(isWall(cell.x,cell.y + 1))) ls.push(new Cell(cell.x,cell.y + 1,3,null,null))
+    if(cell.y + 1 < maxY && isPresentOpen(cell.x,cell.y + 1)&& !(isWall(cell.x,cell.y + 1))) ls.push(new Cell(cell.x,cell.y + 1,3,null,null))
     if(cell.x - 1 >= 0 && isPresentOpen(cell.x - 1,cell.y)&& !(isWall(cell.x-1,cell.y))) ls.push(new Cell(cell.x - 1,cell.y,3,null,null))
-    if(isPresentOpen(cell.x + 1,cell.y)&& !(isWall(cell.x + 1,cell.y))) ls.push(new Cell(cell.x + 1,cell.y,3,null,null))
+    if(cell.x + 1 < maxX &&isPresentOpen(cell.x + 1,cell.y)&& !(isWall(cell.x + 1,cell.y))) ls.push(new Cell(cell.x + 1,cell.y,3,null,null))
     return ls
 }
 
@@ -131,18 +145,6 @@ function voisinBackward(cell){
         }
     });
     return ls
-}
-
-function isPresentClose(x,y){
-    let i = 0
-    let state = false
-    while ( !(state) && i < lsClose.length ){
-        if (lsClose[i].x == x && lsClose[i].y == y){
-            state = true
-        }
-        i++;
-    }
-    return state
 }
 
 function backward(){
@@ -172,7 +174,7 @@ function backward(){
 function resolveMaze(){
     lsOpen.push(start)
     let state = false
-    while(lsOpen.length > 0 && !(state)){
+    while(lsOpen.length >= 0 && !(state)){
         current = lsOpen.shift()
         
         if ( current.x == end.x && current.y == end.y){
@@ -202,10 +204,10 @@ function resolveMaze(){
 function animate(){
     requestAnimationFrame(animate)
     ctx.clearRect(0,0,canvas.width,canvas.height)
-    lsWall.forEach(cell => {
+    lsClose.forEach(cell => {
         cell.render()
     });
-    lsClose.forEach(cell => {
+    lsWall.forEach(cell => {
         cell.render()
     });
     advance()
@@ -274,6 +276,8 @@ window.onkeydown = function(event) {
         lsWall.push(end)
     }else if ( key == 'E' ) {
         start.heuris = getDistance(cursorX,cursorY,end.x,end.y)
+        lsOpen = []
+        lsClose = []
         resolveMaze()
     }else if ( key == 'W' ) {
         poseBlock = true

@@ -11,6 +11,13 @@ canvas{
     padding: 0px;
 }
 
+p{
+    position: absolute;
+    top: 6.5% ;
+    left: 15%;
+    user-select: none;
+}
+
 h1{
     position: absolute;
     top: 4% ;
