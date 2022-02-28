@@ -6,13 +6,16 @@ const ctx = canvas.getContext('2d')
 canvas.height = innerHeight
 canvas.width = innerWidth
 
+const addMargeX = (innerWidth / 1.05 * .05)
+const addMargeY = (innerHeight / 1.05 * .05)
+
 
 //  -------------------- Variables --------------------  // 
 
 let lsWall = []
 let side = 40
-let maxX = divEucli(innerWidth,side)
-let maxY = divEucli(innerHeight,side)
+let maxX = divEucli(innerWidth,side) + 1
+let maxY = divEucli(innerHeight,side) + 1
 
 let cursorX
 let cursorY
@@ -229,8 +232,9 @@ function advance(){
 //  -------------------- Functions Utils --------------------  // 
 
 function tellPos(p){
-    cursorX = divEucli( p.pageX , side )
-    cursorY = divEucli( p.pageY , side )
+
+    cursorX = divEucli( (p.pageX - addMargeX) * 1.11  , side )
+    cursorY = divEucli( (p.pageY - addMargeY) * 1.11 , side )
 }
 
 function divEucli(nb,div){
@@ -258,9 +262,6 @@ addEventListener('mousemove', tellPos, true);
 canvas.addEventListener('click',(e)=>{
 
     e.preventDefault();
-
-    cursorX = divEucli(e.offsetX*1.11,side);
-    cursorY = divEucli(e.offsetY*1.11,side);
 
     lsWall.push(new Cell(cursorX,cursorY,0))
 })
