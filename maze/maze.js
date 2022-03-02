@@ -13,12 +13,14 @@ const addMargeY = (innerHeight / 1.05 * .05)
 //  -------------------- Variables --------------------  // 
 
 let lsWall = []
-let side = 40
+let side = 30
 let maxX = divEucli(innerWidth,side) + 1
 let maxY = divEucli(innerHeight,side) + 1
 
 let cursorX
 let cursorY
+
+let pathRealTime = false;
 
 
 let poseBlock = false
@@ -56,7 +58,6 @@ class Cell{
         ctx.fillRect(this.x * side , this.y * side , side , side)
     }
 }
-
 
 //  -------------------- Functions Maze --------------------  // 
 
@@ -179,7 +180,6 @@ function resolveMaze(){
     let state = false
     while(lsOpen.length >= 0 && !(state)){
         current = lsOpen.shift()
-        
         if ( current.x == end.x && current.y == end.y){
             console.log('End solving')
             state = true
@@ -213,6 +213,12 @@ function animate(){
     lsWall.forEach(cell => {
         cell.render()
     });
+    if(start != null){
+        start.render()
+    }
+    if(end != null){
+        end.render()
+    }
     advance()
 }
 
@@ -221,10 +227,14 @@ function animate(){
 
 function advance(){
     if(poseBlock == true){
-        console.log(cursorX,cursorY)
         if(isPresentWall(cursorX,cursorY) == true){
             lsWall.push(new Cell(cursorX,cursorY,0,null,null))
         }
+    }
+    if(pathRealTime == true || poseBlock == true){
+        lsOpen = []
+        lsClose = []
+        resolveMaze()
     }
 }
 
@@ -233,8 +243,15 @@ function advance(){
 
 function tellPos(p){
 
-    cursorX = divEucli( (p.pageX - addMargeX) * 1.11  , side )
-    cursorY = divEucli( (p.pageY - addMargeY) * 1.11 , side )
+    if ( divEucli( (p.pageX - addMargeX) * 1.11  , side ) != cursorX || divEucli( (p.pageY - addMargeY) * 1.11 , side ) != cursorY){
+        cursorX = divEucli( (p.pageX - addMargeX) * 1.11  , side )
+        cursorY = divEucli( (p.pageY - addMargeY) * 1.11 , side )
+
+        if( pathRealTime == true && isPresentWall(cursorX,cursorY) ){
+            end = new Cell(cursorX,cursorY,2)
+        }
+    }
+
 }
 
 function divEucli(nb,div){
@@ -271,10 +288,9 @@ window.onkeydown = function(event) {
 
     if ( key == 'A' ) {
         start = new Cell(cursorX,cursorY,1,0,null)
-        lsWall.push(start)
+        particle.cell = start
     }else if ( key == 'Z' ) {
         end = new Cell(cursorX,cursorY,2)
-        lsWall.push(end)
     }else if ( key == 'E' ) {
         start.heuris = getDistance(cursorX,cursorY,end.x,end.y)
         lsOpen = []
@@ -282,6 +298,8 @@ window.onkeydown = function(event) {
         resolveMaze()
     }else if ( key == 'W' ) {
         poseBlock = true
+    }else if ( key == 'X' ) {
+        pathRealTime = true
     }
 }
 
@@ -290,6 +308,8 @@ window.onkeyup = function(event) {
 
     if ( key == 'W' ) {
         poseBlock = false
+    }else if ( key == 'X' ) {
+        pathRealTime = false
     }
 };
 

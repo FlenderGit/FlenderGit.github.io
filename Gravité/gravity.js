@@ -87,7 +87,7 @@ class Circle extends Entity{
 }
 
 
-//  -------------------- Functions Maze --------------------  // 
+//  -------------------- Functions Gravity --------------------  // 
 
 function detectCollision(){
     lsEntity.forEach(entity => {
@@ -102,21 +102,25 @@ function detectCollision(){
                 entity.collision = true;
                 other.collision = true;
 
-                let vCollision = {x: other.x - entity.x, y: other.y - entity.y};
-                let distance = Math.sqrt((other.x-entity.x)*(other.x-entity.x) + (other.y-entity.y)*(other.y-entity.y));
-                let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance};
-                let vRelativeVelocity = {x: entity.velX - other.velX, y: entity.velY - other.velY};
-                let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
+                let velX = other.x - entity.x
+                let velY = other.y - entity.y
+                let distance = getDistance(entity.x,entity.y,other.x,other.y)
+                let colXnorm = velX / distance
+                let colYnorm = velY / distance
+                let velXrel = entity.velX - other.velX
+                let velYrel = entity.velY - other.velY
+                let speed = colXnorm * velXrel + colYnorm * velYrel
+
                 if (speed < 0){
                     break;
                 }
                 speed *= RESTITUTION
                 let impulse = 2 * speed / (entity.mass + other.mass);
-               
-                entity.velX -= (impulse * vCollisionNorm.x * other.mass) * RESTITUTION;
-                entity.velY -= (impulse * vCollisionNorm.y * other.mass) * RESTITUTION;
-                other.velX += (impulse * vCollisionNorm.x * entity.mass) * RESTITUTION;
-                other.velY += (impulse * vCollisionNorm.y * entity.mass) * RESTITUTION;
+
+                entity.velX -= (impulse * colXnorm * other.mass) * RESTITUTION;
+                entity.velY -= (impulse * colYnorm * other.mass) * RESTITUTION;
+                other.velX += (impulse * colXnorm * entity.mass) * RESTITUTION;
+                other.velY += (impulse * colYnorm * entity.mass) * RESTITUTION;
             }
             
         }
@@ -133,8 +137,7 @@ function rectangleIntersect(x1, y1, w1, h1, x2, y2, w2, h2) {
 }
 
  function circleIntersect(x1, y1, r1, x2, y2, r2) {
-    let squareDistance = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
-    return squareDistance <= ((r1 + r2) * (r1 + r2))
+    return getDistance(x1,y1,x2,y2) <= r1 + r2
 }
 
 
@@ -179,6 +182,10 @@ function getRandomFromArray(){
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+function getDistance(x1,y1,x2,y2){
+    return Math.sqrt( Math.pow(x1 - x2,2) + Math.pow(y1 - y2,2)  )
 }
 
 
