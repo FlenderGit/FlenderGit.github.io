@@ -131,5 +131,11 @@ header ul li a:hover {
     border: 2px solid var(--middle-color);
 }
 
-
-
+footer {
+    background-color: var(--dark-color);
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: whitesmoke;
+}
