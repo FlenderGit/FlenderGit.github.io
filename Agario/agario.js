@@ -46,15 +46,16 @@ class Blob {
     tick(){
         let vec = { x : cursorX , y : cursorY }
         let distance = getDistanceTo0(vec.x,vec.y)
-        vec.x /= distance
-        vec.y /= distance
-        //vec.x *= (64/this.radius*3)
-        //vec.y *= (64/this.radius*3)
+        if ( distance > 0){
+            vec.x /= distance
+            vec.y /= distance
+        }
+        //vec.x *= speed
+        //vec.y *= speed
         this.x += vec.x
         this.y += vec.y
         camera.x = this.x - innerWidth/2
         camera.y = this.y - innerHeight/2
-        console.log(this.x , this.y)
     }
 
     render(ctx) {
