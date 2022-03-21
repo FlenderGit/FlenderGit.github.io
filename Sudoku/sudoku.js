@@ -80,9 +80,7 @@ function makeMatrice(){
 
         for ( let i = 0 ; i < 3 ; i ++){
             for ( let k = 0 ; k < 3 ; k ++){
-                if (isInGrid(divEucli( coord.x , 3) , divEucli( coord.y , 3) )){
-                    row[coordToInt(divEucli( coord.x , 3)+i,divEucli( coord.y , 3)+k)] = 1
-                }
+                row[coordToInt(divEucli( coord.x , 3)+i,divEucli( coord.y , 3)+k)] = 1
             }
         }
 

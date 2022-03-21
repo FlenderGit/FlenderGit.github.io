@@ -1,0 +1,62 @@
+
+:root{
+    --main-bg-color : #161426;
+    --light-color : #983BBF;
+    --dark-color : #262240;
+    --middle-color : #5C3973;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    scroll-behavior: smooth;
+    overflow: hidden;
+}
+
+header{
+    position: static;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--main-bg-color);
+}
+
+header p {
+    color: antiquewhite;
+}
+
+body {
+    background-color: var(--dark-color);
+}
+
+.toolbar {
+    position: absolute;
+    background-color: var(--middle-color);
+    width: 38px;
+    height: 85%;
+    left: 10px;
+    top : 85px;
+    display: flex;
+    flex-direction: column;
+}
+
+.toolbar button {
+    width: 20;
+    height: 20;
+    margin: 10px;
+}
+
+.toolbar button i {
+    vertical-align: middle }
+
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
