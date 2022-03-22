@@ -7,8 +7,20 @@ const btn_mouse = document.getElementById('mouse');
 const btn_createEdge = document.getElementById('createEdge');
 
 
-let cursorX = 0
-let cursorY = 0
+
+const txt_edge = document.getElementById('infobar-edge');
+const txt_edgeWeigth = document.getElementById('infobar-edge-weigth');
+const txt_edgeOriented = document.getElementById('infobar-edge-oriented');
+
+txt_edgeWeigth.placeholder = "";
+txt_edge.style.display = "none";
+
+
+const txt_vertice = document.getElementById('infobar-vertice');
+const txt_verticeName = document.getElementById('infobar-vertice-name');
+const txt_verticeColor = document.getElementById('infobar-vertice-color');
+
+txt_vertice.style.display = "none";
 
 let lsVertice = [];
 let lsEdges = [];
@@ -25,19 +37,56 @@ let selected = null;
 
 class Edges {
 
-    constructor(start , end){
+    constructor(start , end , oriented){
         this.start = start;
         this.end = end;
+        this.weight = 1
+        this.oriented = oriented
     }
 
     render(){
+
+        let d = getDistance(this.start.x,this.start.y,this.end.x,this.end.y) * 1
+        let dx = (this.start.x - this.end.x) / d
+        let dy = (this.start.y - this.end.y) / d
+
         ctx.beginPath();
         ctx.strokeStyle = '#CD4EE6';
-        ctx.moveTo(this.start.x,this.start.y)
-        ctx.lineTo(this.end.x,this.end.y)
+        ctx.moveTo(this.start.x-dx*10,this.start.y-dy*10)
+        ctx.lineTo(this.end.x+dx*10,this.end.y+dy*10)
         ctx.stroke();
+
+        if ( this.weight > 1){
+            ctx.fillStyle = '#CD4EE6';
+            ctx.fillText(this.weight,(this.start.x + this.end.x)/2 , (this.start.y + this.end.y)/2 - 10 , 30); 
+        }
+
+        // test
+
+        if ( this.oriented){
+            
+            drawHead(ctx,this.end.x+dx*20 , this.end.y+dy*20 , this.end.x+dx*10 , this.end.y+dy*10 ,true )
+    
+        }
+
+        
     }
 
+    isEqual(e){
+        return ( this.start.isEqual(e.start) && this.end.isEqual(e.end))
+    }
+
+}
+
+function drawHead(context, x1, y1, x2, y2, filled) {
+    var dx = x2 - x1;
+    var dy = y2 - y1;
+    context.beginPath();
+      context.moveTo(x1 + 0.5 * dy, y1 - 0.5 * dx);
+    context.lineTo(x1 - 0.5 * dy, y1 + 0.5 * dx);
+    context.lineTo(x2, y2);
+    context.closePath();
+    filled ? context.fill() : context.stroke();
 }
 
 class Vertice {
@@ -45,6 +94,8 @@ class Vertice {
     constructor(x,y){
         this.x = x
         this.y = y
+        this.name = ''
+        this.color = ''
     }
 
     getX(){
@@ -56,10 +107,29 @@ class Vertice {
     }
 
     render(){
+        
+
+        if ( this.color == ''){
+            ctx.strokeStyle = '#CD4EE6';
+            ctx.fillStyle = '#CD4EE6';
+        }else{
+            ctx.strokeStyle = this.color;
+            ctx.fillStyle = this.color;
+        }
+
+        if ( this.name != '' ){
+            ctx.fillText(this.name,this.x - 10 , this.y - 15 , 30); 
+        }
+
+        
+
         ctx.beginPath();
-        ctx.strokeStyle = '#CD4EE6';
         ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI);
         ctx.stroke();
+    }
+
+    isEqual(p){
+        return (this.x == p.x && this.y == p.y )
     }
 }
 
@@ -72,10 +142,7 @@ function animate(){
 
 function advance(){
 
-    if( state == 1 && selected != null) {
-        selected.x = cursorX
-        selected.y = cursorY
-    }
+    
 
     if ( state == 2 && selected != null && mouseState == true){
         
@@ -121,16 +188,32 @@ btn_createEdge.addEventListener('click',(e)=>{
 
 canvas.addEventListener('mousedown',(e)=>{
     mouseState = true;
+
+
+    // Ajouter Point
     if( state == 0){
         lsVertice.push(new Vertice(e.offsetX,e.offsetY))
-
         addRowMatrix()
-        
     }
+
+    // Selected
     if( state == 1 || state == 2 ) {
+
+
+        selected = null
+
         lsVertice.forEach(vertice => {
             if( getDistance(e.offsetX , e.offsetY , vertice.getX() , vertice.getY() ) < 10)  {
                 selected = vertice
+
+                txt_vertice.style.display = "";
+                txt_edge.style.display = "none";
+
+                txt_verticeColor.placeholder = selected.color;
+                txt_verticeColor.value = ""
+
+                txt_verticeName.placeholder = selected.name;
+                txt_verticeName.value = ""
             }
         });
         if ( selected == null){
@@ -143,7 +226,16 @@ canvas.addEventListener('mousedown',(e)=>{
                 let edge = lsEdges[i]
 
                 if ( distToSegment({x:e.offsetX,y:e.offsetY} , edge.start,edge.end) < 20 ){
-                    selected = i
+                    selected = edge
+
+                    txt_vertice.style.display = "none";
+                    txt_edge.style.display = '';
+    
+                    
+                    txt_edgeWeigth.placeholder = selected.weight;
+                    txt_edgeWeigth.value = '';
+
+                    txt_edgeOriented.checked = selected.oriented
                 }
 
                 i++
@@ -152,21 +244,64 @@ canvas.addEventListener('mousedown',(e)=>{
     }
 });
 
+function changeWeigth (value){
+    selected.weight = value
+}
+
+function changeName (value){
+    selected.name = value
+}
+
+function changeColor (value){
+    selected.color = value
+}
+
+function changeOriented (){
+    selected.oriented = txt_edgeOriented.checked;
+    let indSelected = getIndex(lsEdges,selected)
+    let indStart = getIndex(lsVertice,lsEdges[indSelected].start) 
+    let indEnd = getIndex(lsVertice,lsEdges[indSelected].end) 
+    if ( selected.oriented ) {
+        if ( indStart != null && indEnd != null){
+            matrix[indEnd][indStart] = 0    
+        }
+    }else{
+        if ( indStart != null && indEnd != null){
+            matrix[indEnd][indStart] = 1    
+        }
+    }
+}
+
 window.onkeydown = function(event) {
     let key = event.key.toUpperCase();
     if ( key == 'A' ) {
-        console.log()
-        let indSelected = getIndex(lsVertice,lsEdges[selected].start) 
-        let indEnd = getIndex(lsVertice,lsEdges[selected].end) 
 
-        if ( indSelected != null && indEnd != null){
+        if ( selected instanceof Vertice){
 
-            matrix[indSelected][indEnd] = 0
-            matrix[indEnd][indSelected] = 0
-            lsEdges.splice(selected, 1)
-            selected = null;
+            let ind = getIndex(lsVertice,selected)
+            lsVertice.splice(ind, 1)
+
+
+
+        }else{
+
+            indSelected = getIndex(lsEdges,selected)
+
+            let indStart = getIndex(lsVertice,lsEdges[indSelected].start) 
+            let indEnd = getIndex(lsVertice,lsEdges[indSelected].end) 
+    
+            if ( indStart != null && indEnd != null){
+    
+                matrix[indStart][indEnd] = 0
+                matrix[indEnd][indStart] = 0
+                lsEdges.splice(indSelected, 1)
+    
+            }
 
         }
+
+        selected = null;
+
     }
 }
 
@@ -213,7 +348,21 @@ function getIndex(ls,value){
     return r;
 }
 
+canvas.addEventListener('mousemove', e => {
+
+    if( state == 1 && selected != null && mouseState== true) {
+        selected.x = e.offsetX
+        selected.y = e.offsetY
+    }
+
+    cursorX = e.offsetX
+    cursorY = e.offsetY
+    
+  });
+
 canvas.addEventListener('mouseup',(e)=>{
+
+    // Créer liaison
     if (state == 2){
         let end = null;
         lsVertice.forEach(vertice => {
@@ -222,8 +371,8 @@ canvas.addEventListener('mouseup',(e)=>{
             }
         });
 
-        if ( end != null && end != selected){
-            lsEdges.push(new Edges(selected,end))
+        if ( end != null && !(end.isEqual(selected))){
+            lsEdges.push(new Edges(selected,end,false))
 
             let indSelected = getIndex(lsVertice,selected) 
             let indEnd = getIndex(lsVertice,end) 
@@ -236,19 +385,19 @@ canvas.addEventListener('mouseup',(e)=>{
 
             }
         }
+
+
     }
 
-    if ( state == 1) {
-        selected = null;
-    }
+    
+
+    
 
     mouseState = false;
 });
 
-canvas.addEventListener('mousemove',(e)=>{
-    cursorX = e.offsetX
-    cursorY = e.offsetY
-});
+
+
 
 animate()
 

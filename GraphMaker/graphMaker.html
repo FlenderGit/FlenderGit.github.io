@@ -10,26 +10,62 @@
 
 </head>
 
-<header>
-    <p>Graph Maker</p>
-</header>
+
 
 <body>
+
+    <div class="header">
+
+        <a href="#" class="title">Graph Maker</a>
+        <nav>
+            <ul>
+                <li class="menu-deroulant"><a href="#">Coloration</a>
+                <ul class="sous-menu">
+                    <li><a href="#">Color1</a></li>
+                    <li><a href="#">Color2</a></li>
+                </ul>
+                </li>
+
+
+                <li class="menu-deroulant"><a href="#">Path Finding</a>
+                <ul class="sous-menu">
+                    <li><a href="#">Bellman</a></li>
+                    <li><a href="#">Djirsha</a></li>
+                </ul>
+                </li>
+            </ul>
+        </nav>
+    
+
+    </div>
+
+    
     
     <div class="toolbar">
         <button id='createVertices' type="button"><i class="fa-solid fa-plus"></i></button>
         <button id='mouse' type="button"><i class="fa-solid fa-arrow-pointer"></i></button>
         <button id='createEdge' type="button"><i class="fa-solid fa-ruler"></i></button>
     </div>
-   
+
+    <div class="infobar">
+
+        <div id="infobar-edge">
+            <p>Weigth :</p>
+            <input type="number" id="infobar-edge-weigth" onchange="changeWeigth(this.value)">
+            <p>Oriented :</p>
+            <input type="checkbox" id="infobar-edge-oriented" onchange="changeOriented(this.value)">
+        </div>
+
+        <div id="infobar-vertice">
+            <p>Nom :</p>
+            <input type="text" id="infobar-vertice-name" onchange="changeName(this.value)">
+            <p>Color :</p>
+            <input type="text" id="infobar-vertice-color" onchange="changeColor(this.value)">
+        </div>
+        
+    </div>
+
     <canvas></canvas>
-    
-    
-    
-
-    
-
-
 
     <script src="graphMaker.js"></script>
 </body>
