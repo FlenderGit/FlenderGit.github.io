@@ -48,11 +48,14 @@ class Edges {
 
     }
 
+    
+
     render(){
+
+        this.distance = getDistance(this.start.x,this.start.y,this.end.x,this.end.y)
 
         this.dx = (this.start.x - this.end.x) / this.distance
         this.dy = (this.start.y - this.end.y) / this.distance
-
 
         if ( this.oriented){
 
@@ -150,9 +153,10 @@ function advance(){
         if ( distance > 10){
 
             let dx = (cursorX - selected.x ) / distance
-            let dy = (cursorY -selected.y ) / distance
+            let dy = (cursorY -selected.y ) / distance 
     
-    
+            ctx.fillStyle = '#CD4EE6'
+
             ctx.beginPath();
 
             ctx.moveTo(selected.x+dx*10,selected.y+dy*10)

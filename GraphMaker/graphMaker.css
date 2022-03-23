@@ -29,7 +29,7 @@
 
 
 .header .title{
-    color: gray;
+    color: aliceblue;
     font-weight: 700px;
     text-decoration: none;
     font-size: 2em;
@@ -71,7 +71,8 @@ nav > ul > li > a {
 
 li a {
     text-decoration: none;
-    color: var(--light-color);
+    font-size: 13px;
+    color: antiquewhite;
 }
 
 .menu-deroulant >a:after{
