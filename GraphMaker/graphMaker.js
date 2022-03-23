@@ -40,33 +40,39 @@ class Edges {
     constructor(start , end , oriented){
         this.start = start;
         this.end = end;
-        this.weight = 1
-        this.oriented = oriented
+        this.weight = 1;
+        this.oriented = oriented;
+        this.distance = getDistance(start.x,start.y,end.x,end.y)
+        this.dx = (start.x - end.x) / this.distance
+        this.dy = (start.y - end.y) / this.distance
+
     }
 
     render(){
 
-        let d = getDistance(this.start.x,this.start.y,this.end.x,this.end.y) * 1
-        let dx = (this.start.x - this.end.x) / d
-        let dy = (this.start.y - this.end.y) / d
+        this.dx = (this.start.x - this.end.x) / this.distance
+        this.dy = (this.start.y - this.end.y) / this.distance
+
+
+        if ( this.oriented){
+
+            ctx.strokeStyle = this.start.color
+            ctx.fillStyle = this.start.color
+            drawHead(ctx,this.end.x+this.dx*20 , this.end.y+this.dy*20 , this.end.x+this.dx*10 , this.end.y+this.dy*10 ,true )
+    
+        }else{
+            ctx.strokeStyle = '#CD4EE6';
+            ctx.fillStyle = '#CD4EE6'
+        }
 
         ctx.beginPath();
-        ctx.strokeStyle = '#CD4EE6';
-        ctx.moveTo(this.start.x-dx*10,this.start.y-dy*10)
-        ctx.lineTo(this.end.x+dx*10,this.end.y+dy*10)
+        ctx.moveTo(this.start.x-this.dx*10,this.start.y-this.dy*10)
+        ctx.lineTo(this.end.x+this.dx*10,this.end.y+this.dy*10)
         ctx.stroke();
 
         if ( this.weight > 1){
             ctx.fillStyle = '#CD4EE6';
             ctx.fillText(this.weight,(this.start.x + this.end.x)/2 , (this.start.y + this.end.y)/2 - 10 , 30); 
-        }
-
-        // test
-
-        if ( this.oriented){
-            
-            drawHead(ctx,this.end.x+dx*20 , this.end.y+dy*20 , this.end.x+dx*10 , this.end.y+dy*10 ,true )
-    
         }
 
         
@@ -95,7 +101,7 @@ class Vertice {
         this.x = x
         this.y = y
         this.name = ''
-        this.color = ''
+        this.color = '#CD4EE6'
     }
 
     getX(){
@@ -108,14 +114,8 @@ class Vertice {
 
     render(){
         
-
-        if ( this.color == ''){
-            ctx.strokeStyle = '#CD4EE6';
-            ctx.fillStyle = '#CD4EE6';
-        }else{
-            ctx.strokeStyle = this.color;
-            ctx.fillStyle = this.color;
-        }
+        ctx.strokeStyle = this.color;
+        ctx.fillStyle = this.color;
 
         if ( this.name != '' ){
             ctx.fillText(this.name,this.x - 10 , this.y - 15 , 30); 
@@ -142,14 +142,27 @@ function animate(){
 
 function advance(){
 
-    
 
-    if ( state == 2 && selected != null && mouseState == true){
+    if ( state == 2 && selected != null && mouseState == true ){
+
+        let distance = getDistance(selected.x,selected.y,cursorX,cursorY);
+
+        if ( distance > 10){
+
+            let dx = (cursorX - selected.x ) / distance
+            let dy = (cursorY -selected.y ) / distance
+    
+    
+            ctx.beginPath();
+
+            ctx.moveTo(selected.x+dx*10,selected.y+dy*10)
+            ctx.lineTo(cursorX,cursorY)
+            ctx.stroke();
+
+        }
+
+
         
-        ctx.beginPath();
-        ctx.moveTo(selected.x,selected.y)
-        ctx.lineTo(cursorX,cursorY)
-        ctx.stroke();
 
     }
     
@@ -203,18 +216,25 @@ canvas.addEventListener('mousedown',(e)=>{
         selected = null
 
         lsVertice.forEach(vertice => {
-            if( getDistance(e.offsetX , e.offsetY , vertice.getX() , vertice.getY() ) < 10)  {
-                selected = vertice
 
-                txt_vertice.style.display = "";
-                txt_edge.style.display = "none";
+            if ( Math.abs(e.offsetX-vertice.getX()) < 10 && Math.abs(e.offsetY-vertice.getY())  ){
 
-                txt_verticeColor.placeholder = selected.color;
-                txt_verticeColor.value = ""
+                if( getDistance(e.offsetX , e.offsetY , vertice.getX() , vertice.getY() ) < 10)  {
+                    selected = vertice
+    
+                    txt_vertice.style.display = "";
+                    txt_edge.style.display = "none";
+    
+                    txt_verticeColor.placeholder = selected.color;
+                    txt_verticeColor.value = ""
+    
+                    txt_verticeName.placeholder = selected.name;
+                    txt_verticeName.value = ""
+                }
 
-                txt_verticeName.placeholder = selected.name;
-                txt_verticeName.value = ""
             }
+
+            
         });
         if ( selected == null){
 
@@ -246,6 +266,13 @@ canvas.addEventListener('mousedown',(e)=>{
 
 function changeWeigth (value){
     selected.weight = value
+    let indSelected = getIndex(lsEdges,selected)
+    let indStart = getIndex(lsVertice,lsEdges[indSelected].start) 
+    let indEnd = getIndex(lsVertice,lsEdges[indSelected].end) 
+    if ( !(selected.oriented) ) {
+        matrix[indEnd][indStart] = parseInt(value)
+    }
+    matrix[indStart][indEnd] = parseInt(value)
 }
 
 function changeName (value){
@@ -267,7 +294,7 @@ function changeOriented (){
         }
     }else{
         if ( indStart != null && indEnd != null){
-            matrix[indEnd][indStart] = 1    
+            matrix[indEnd][indStart] = selected.weight    
         }
     }
 }
@@ -366,9 +393,12 @@ canvas.addEventListener('mouseup',(e)=>{
     if (state == 2){
         let end = null;
         lsVertice.forEach(vertice => {
-            if( getDistance(e.offsetX , e.offsetY , vertice.getX() , vertice.getY() ) < 10)  {
-                end = vertice
+            if ( Math.abs(e.offsetX-vertice.getX()) < 10 && Math.abs(e.offsetY-vertice.getY())  ){
+                if( getDistance(e.offsetX , e.offsetY , vertice.getX() , vertice.getY() ) < 10)  {
+                    end = vertice
+                }
             }
+            
         });
 
         if ( end != null && !(end.isEqual(selected))){
