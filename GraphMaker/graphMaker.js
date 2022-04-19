@@ -45,7 +45,7 @@ class Edges {
         this.distance = getDistance(start.x,start.y,end.x,end.y)
         this.dx = (start.x - end.x) / this.distance
         this.dy = (start.y - end.y) / this.distance
-
+        this.color = '#CD4EE6'
     }
 
     
@@ -59,8 +59,8 @@ class Edges {
 
         if ( this.oriented){
 
-            ctx.strokeStyle = this.start.color
-            ctx.fillStyle = this.start.color
+            ctx.strokeStyle = this.color
+            ctx.fillStyle = this.color
             drawHead(ctx,this.end.x+this.dx*20 , this.end.y+this.dy*20 , this.end.x+this.dx*10 , this.end.y+this.dy*10 ,true )
     
         }else{
@@ -107,6 +107,10 @@ class Vertice {
         this.color = '#CD4EE6'
     }
 
+    getColor(){
+        return this.color
+    }
+
     getX(){
         return this.x
     }
@@ -144,7 +148,6 @@ function animate(){
 }
 
 function advance(){
-
 
     if ( state == 2 && selected != null && mouseState == true ){
 
@@ -202,6 +205,79 @@ btn_mouse.addEventListener('click',(e)=>{
 btn_createEdge.addEventListener('click',(e)=>{
     state = 2;
 });
+
+
+function bellman(matrix){
+
+    let matrixCopy = [...matrix];
+    let path = []
+
+    for ( let i = 0 ; i < matrix.length ; i++){
+        for ( let j = 0 ; j < matrix.length ; j++){
+            if(matrixCopy[j][i] == 0) matrixCopy[j][i] = Infinity;
+        }
+    }
+
+    let lsDistance = [0];
+    let change = true;
+    for ( let i = 1 ; i < matrix.length ; i++){
+        lsDistance.push(Infinity)
+        path.push(null)
+    }
+
+    while (change){
+        change = false;
+        for ( let i = 0 ; i < matrix.length ; i++){
+            for ( let j = 0 ; j < matrix.length ; j++){
+                if (lsDistance[i] + matrix[i][j] < lsDistance[j]){
+                    lsDistance[j] = lsDistance[i] + matrix[i][j];
+                    change = true
+                    //console.log(path)
+                    path[j] = i
+                }
+            }
+        }
+    }
+
+    path[0] = 0
+    path.push(lsVertice.length-1)
+
+    path = path.filter( (ele,pos)=>path.indexOf(ele) == pos);
+
+
+    //console.log(path)
+
+    for ( let i = 1 ; i < path.length ; i++){
+        if (path[i] == 0){
+            path[i] = path[i-1]
+        }
+    }
+
+    for ( let i = 0 ; i < path.length - 1 ; i++){
+        
+
+        lsVertice[path[i]].color = 'green';
+
+        lsEdges.forEach(edge => {
+
+
+            //console.log(edge.start.x , edge.start.y , edge.end.x , edge.end.y )
+            
+            if(edge.start.isEqual(lsVertice[path[i]]) && edge.end.isEqual(lsVertice[path[i+1]]) ){
+                edge.color = 'green'
+            }
+        });
+
+    }
+
+    console.log(path)
+
+    
+    return lsDistance;   
+}
+
+
+
 
 canvas.addEventListener('mousedown',(e)=>{
     mouseState = true;
@@ -333,6 +409,10 @@ window.onkeydown = function(event) {
 
         selected = null;
 
+    }
+
+    if ( key == 'Z' ) {
+        console.log(bellman(matrix))
     }
 }
 

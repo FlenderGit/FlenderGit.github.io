@@ -2,9 +2,10 @@
 
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+const canvasParent = document.getElementById('canvas')
 
-canvas.width = innerWidth
-canvas.height = innerHeight
+canvas.width = canvasParent.offsetWidth;
+canvas.height = canvasParent.offsetHeight-4;
 
 const nbBoid = document.getElementById("nbBoid");
 const dFlock = document.getElementById("dFlock");
@@ -13,8 +14,8 @@ const dAvoid = document.getElementById("dAvoid");
 const dPredate = document.getElementById("dPredate");
 const mPredate = document.getElementById("mPredate");
 
-const MIN_SPEED_BIRD = 2
-const MAX_SPEED_BIRD = 5
+const MIN_SPEED_BIRD = canvas.width /1000
+const MAX_SPEED_BIRD = MIN_SPEED_BIRD * 3
 
 const MIN_SPEED_PREDATOR = 1
 const MAX_SPEED_PREDATOR = 3
@@ -78,13 +79,13 @@ class Entity{
         if (this.x < pad){
             this.xVel += turn
         }
-        if (this.x > innerWidth - pad){
+        if (this.x > canvas.width - pad){
             this.xVel -= turn;
         }
         if (this.y < pad){
             this.yVel += turn;
         }
-        if (this.y > innerHeight - pad){
+        if (this.y > canvas.height - pad){
             this.yVel -= turn;
         }
     }
@@ -114,7 +115,7 @@ class Bird extends Entity {
     render(){
         ctx.beginPath();
         ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = 'green'
+        ctx.fillStyle = '#983BBF'
         ctx.fill();
         ctx.stroke();
     }
@@ -126,7 +127,7 @@ class Field{
         this.height = height
         this.boidCount = boidCount
         for ( let i = 0 ; i < boidCount ; i++){
-            lsBirds[i] = new Bird(getRandomInt(innerWidth),getRandomInt(innerHeight))
+            lsBirds[i] = new Bird(getRandomInt(canvas.width),getRandomInt(canvas.height))
         }
     }
 }
@@ -149,14 +150,14 @@ function Flock(bird,distance,power){
 }
 
 function Align(bird,distance,power){
-    let lsNeighbors = getNeighbors(bird,distance)
-    let length = lsNeighbors.length
+    let lsNeighbors = getNeighbors(bird,distance);
+    let length = lsNeighbors.length;
 
-    let meanXvel = getSumXvel(lsNeighbors) / length
-    let meanYvel = getSumYvel(lsNeighbors) / length
+    let meanXvel = getSumXvel(lsNeighbors) / length;
+    let meanYvel = getSumYvel(lsNeighbors) / length;
 
-    let dXvel = meanXvel - bird.getXvel()
-    let dYvel = meanYvel - bird.getYvel()
+    let dXvel = meanXvel// - bird.getXvel();
+    let dYvel = meanYvel// - bird.getYvel();
 
     return [dXvel * power , dYvel * power]
 }
@@ -200,6 +201,8 @@ function Predate(bird,distance,power){
 function animate(){
     requestAnimationFrame(animate)
     ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.fillStyle = '#262240';
+    ctx.fillRect(0,0,canvas.width,canvas.height)
     advance()
 }
 
@@ -294,7 +297,7 @@ function changeNbBoid(nb){
     } else if ( nb > lsBirds.length){
         let add = nb - lsBirds.length
         for ( let i = 0 ; i < add ; i++){
-            lsBirds.push(new Bird(getRandomInt(innerWidth),getRandomInt(innerHeight)))
+            lsBirds.push(new Bird(getRandomInt(canvas.width),getRandomInt(canvas.height)))
         }
     }
 }
@@ -305,11 +308,12 @@ function changeNbPredate(nb){
     } else if ( nb > lsPredate.length){
         let add = nb - lsPredate.length
         for ( let i = 0 ; i < add ; i++){
-            lsPredate.push(new Predator(getRandomInt(innerWidth),getRandomInt(innerHeight)))
+            lsPredate.push(new Predator(getRandomInt(canvas.width),getRandomInt(canvas.height)))
         }
     }
     console.log('Nb Predate : ' , lsPredate.length)
 }
+
 
 
 ///  -------------------- Listeners --------------------  // 
@@ -325,6 +329,9 @@ function getNeighbors(bird,distance){
     });
     return lsNeighbors
 }
+
+
+
 
 
 ///  -------------------- Program --------------------  // 

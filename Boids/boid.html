@@ -5,74 +5,92 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boid Simulation</title>
-
-    <style>
-        body {
-            margin: 0;
-            text-align: center;
-            background-color: black;
-        }
-        canvas{
-            width: 90%;
-            height: 90%;
-            border: 2px solid black;
-            margin: 2%;
-            background-color: beige;
-        }
-        table{
-            border:1px solid black;
-            position: absolute;
-            bottom: 7% ;
-            left: 7%;
-            user-select: none;
-        }
-        h1{
-            position: absolute;
-            top: 4% ;
-            left: 7%;
-            user-select: none;
-        }
-    </style>
+    <link rel="stylesheet" href="boid.css">
 
 </head>
+
+
 <body>
-    <h1>Boids Simulation</h1>
-    <div>
+
+    <div class="title">
+        <h1>Boid simulation</h1>
+    </div>
+
+    <div id="canvas">
         <canvas></canvas>
     </div>
 
-    <div>
-        >
-            <tr>
-                <td>Distance Flock</td>
-                <td><input id="dFlock" type="range" value="300" min="200" max="400"></td>
-            </tr>
-            <tr>
-                <td>Distance Align</td>
-                <td><input id="dAlign" type="range" value="35" min="10" max="60"></td>
-            </tr>
-            <tr>
-                <td>Distance Avoid</td>
-                <td><input id="dAvoid" type="range" value="20" min="1" max="40"></td>
-            </tr>
-            <tr>
-                <td>Number of Predate</td>
-                <td><input id="nbPredate" type="range" value="0" min="0" max="6" onchange="changeNbPredate(this.value)"></td>
-            </tr>
-            <tr>
-                <td>Distance Predate</td>
-                <td><input id="dPredate" type="range" value="200" min="100" max="400"></td>
-            </tr>
-            <tr>
-                <td>Predate Mouse</td>
-                <td>
-                    <input id="mPredate" type="checkbox" checked>
-                    <span class="slider round"></span>
-                </td>
-            </tr>
-            
-        </table>
+    
+
+    <div class="parameters">    
+
+        <nav>
+
+            <ul>
+                <li><h1>Boids Simulation</h1></li>
+                
+                <li>
+                    <div>
+                        <p>Number of Boids</p>
+                        <input id="nbBoid" type="range" value="20" min="1" max="300" onchange="changeNbBoid(this.value)">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Distance Flock</p>
+                        <input id="dFlock" type="range" value="300" min="200" max="400">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Distance Align</p>
+                        <input id="dAlign" type="range" value="35" min="10" max="60">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Distance Avoid</p>
+                        <input id="dAvoid" type="range" value="20" min="1" max="40">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Number of Predate</p>
+                        <input id="nbPredate" type="range" value="0" min="0" max="6" onchange="changeNbPredate(this.value)">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Distance Predate</p>
+                        <input id="dPredate" type="range" value="200" min="100" max="400">
+                    </div>
+                </li>
+    
+                <li>
+                    <div>
+                        <p>Predate Mouse</p>
+                        <input id="mPredate" type="checkbox">
+                    </div>
+                </li>
+    
+                
+            </ul>
+        </nav>
+
     </div>
+
+    
+
+    
+
+    
+    
+    
 
 </body>
 </html>
