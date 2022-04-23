@@ -4,15 +4,15 @@ const ctx = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-const DISTANCE_SENSOR_FORWARD = 12;
+const DISTANCE_SENSOR_FORWARD = 13;
 
-const SIDE_SENSOR = 6;
+const SIDE_SENSOR = 10;
 const MIDDLE_SIDE_SENSOR = SIDE_SENSOR / 2;
 const VIEW_RANGE = 50;
 const VIEW_ANGLE = 120;
 const PICKUP_DISTANCE = 7;
-const TIME_MAX_BEFORE_PHEROMONE = 50;
-const LIFE_TIME_PHEROMONE = 3000;
+const TIME_MAX_BEFORE_PHEROMONE = 70;
+const LIFE_TIME_PHEROMONE = 6000;
 
 let lsAnt = []
 let lsFood = []
@@ -291,7 +291,7 @@ class Ant {
         if ( vector != null ){
 
             vector.substract(this.coordonate);
-            vector.multiply(3)
+            vector.multiply(.1)
             this.desiredDirection.add(vector);
 
         }
@@ -488,7 +488,7 @@ function getIndex(ls,value){
 function init(){
     
     for ( let i = 0 ; i < 200 ; i++ ) {
-        lsFood.push(new Food(550 +getRandomInt(100) , 500 + getRandomInt(100)));
+        lsFood.push(new Food(450 +getRandomInt(50) , 500 + getRandomInt(50)));
     }
     /*
     for ( let i = 0 ; i < 100 ; i++ ) {
@@ -500,7 +500,7 @@ function init(){
     */
     
 
-    for ( let i = 0 ; i < 50 ; i++ ) {
+    for ( let i = 0 ; i < 20 ; i++ ) {
         lsAnt.push(new Ant( innerWidth/2 , innerHeight/2));
     }
 

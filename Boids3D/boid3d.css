@@ -1,0 +1,28 @@
+:root{
+    --main-bg-color : #161426;
+    --light-color : #983BBF;
+    --dark-color : #262240;
+    --middle-color : #5C3973;
+}
+
+* {
+    margin: 0px;
+}
+
+html , body {
+    height: 100%;
+    overflow: hidden;
+}
+
+h1 {
+    position: absolute;
+    background-color: var(--main-bg-color);
+    color: var(--middle-color);
+    border-radius: 5px;
+    padding: 5px 3px;
+
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+

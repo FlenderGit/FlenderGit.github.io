@@ -161,7 +161,6 @@ function advance(){
             ctx.fillStyle = '#CD4EE6'
 
             ctx.beginPath();
-
             ctx.moveTo(selected.x+dx*10,selected.y+dy*10)
             ctx.lineTo(cursorX,cursorY)
             ctx.stroke();
