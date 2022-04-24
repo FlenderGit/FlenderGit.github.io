@@ -476,7 +476,6 @@ canvas.addEventListener("touchstart", e => {
     mouse.oldPosition.x = e.touches[0].pageX - e.touches[0].target.offsetLeft
     mouse.oldPosition.y = e.touches[0].pageY - e.touches[0].target.offsetTop
     mouse.newPosition = mouse.oldPosition.copy()
-    console.log(mouse.oldPosition)
 });
 
 canvas.addEventListener("touchend", e => {
