@@ -441,7 +441,6 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-
 function interectLineToPlane(rayDirection,rayPoint,planeNormal,planePoint){
     let r = rayPoint.copy()
     let l = rayDirection.copy()
@@ -463,7 +462,6 @@ canvas.addEventListener('mousemove', e => {
     }
 });
 
-
 canvas.addEventListener('mousedown', e => {
     mouse.mousePress = true;
 });
@@ -475,11 +473,14 @@ canvas.addEventListener('mouseup',e=>{
 
 canvas.addEventListener("touchstart", e => {
     mouse.mousePress = true;
+    mouse.oldPosition.x = e.touches[0].pageX - e.touches[0].target.offsetLeft
+    mouse.oldPosition.y = e.touches[0].pageY - e.touches[0].target.offsetTop
+    mouse.newPosition = mouse.oldPosition.copy()
+    console.log(mouse.oldPosition)
 });
 
 canvas.addEventListener("touchend", e => {
     mouse.mousePress = false;
-
 });
 canvas.addEventListener("touchmove", e =>{
     mouse.update(e.touches[0].pageX - e.touches[0].target.offsetLeft, e.touches[0].pageY - e.touches[0].target.offsetTop);
