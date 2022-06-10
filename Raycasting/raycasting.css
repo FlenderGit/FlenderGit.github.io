@@ -1,0 +1,19 @@
+* {
+    margin: 0px;
+}
+
+html , body {
+    height: 100%
+}
+
+canvas {
+    width: 50px;
+    height: 480px;
+}
+
+body {
+    background-color: blanchedalmond;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
