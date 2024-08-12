@@ -5,5 +5,5 @@
 </script>
 
 <div class="p-3 bg-grey rounded-lg h-24 w-24 flex items-center justify-center cursor-pointer hover:bg-neutral-700 transition-colors duration-300">
-    <img {src} {title} class="max-h-full"/>
+    <img {src} {title} class="max-h-full" alt={title}/>
 </div>
